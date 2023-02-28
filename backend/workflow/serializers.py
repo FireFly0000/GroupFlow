@@ -21,6 +21,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # ...
         return token
 
+def PrintNewUser(user):
+        print(user.username)
+        print(user.password)
+        return
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password])
@@ -45,4 +50,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
 
+        PrintNewUser(user)
+
         return user
+    
