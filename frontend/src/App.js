@@ -90,12 +90,10 @@ class App extends Component {
     );
   };
 
-  renderItems = () => {
-    const { viewCompleted } = this.state;
+  DisplayItem = (viewCompleted) => {
     const newItems = this.state.todoList.filter(
       (item) => item.completed === viewCompleted
     );
-
     return newItems.map((item) => (
       <li
         key={item.id}
@@ -125,6 +123,12 @@ class App extends Component {
         </span>
       </li>
     ));
+  }
+
+  renderItems = () => {
+    const { viewCompleted } = this.state;
+    
+    return(this.DisplayItem(viewCompleted));
   };
 
   render() {
