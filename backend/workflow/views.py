@@ -25,6 +25,10 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
+class UserView(viewsets.ModelViewSet):
+    serializer_class = RegisterSerializer
+    queryset = User.objects.all()
+
 
 @api_view(['GET'])
 def getRoutes(request):

@@ -1,23 +1,23 @@
 import { useState, useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-function Register() {
+function Register(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [email, setEmail] = useState("");
   const { registerUser } = useContext(AuthContext);
 
   const handleSubmit = async e => {
     e.preventDefault();
-    registerUser(username, password, password2);
+    registerUser(username, password, password2, email);
   };
 
   return (
-    <section>
-      <form onSubmit={handleSubmit}>
+    <section className="auth">
+      <div className="Auth-form-container">
+      <form className="register-form" onSubmit={handleSubmit}>
         <h1>Register</h1>
-        <hr />
-        <div>
           <label htmlFor="username">Username</label>
           <input
             type="text"
@@ -26,8 +26,14 @@ function Register() {
             placeholder="Username"
             required
           />
-        </div>
-        <div>
+          <label htmlFor="email">email</label>
+          <input
+            type="text"
+            id="email"
+            onChange={e => setEmail(e.target.value)}
+            placeholder="email"
+            required
+          />
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -36,8 +42,6 @@ function Register() {
             placeholder="Password"
             required
           />
-        </div>
-        <div>
           <label htmlFor="confirm-password">Confirm Password</label>
           <input
             type="password"
@@ -47,9 +51,10 @@ function Register() {
             required
           />
           <p>{password2 !== password ? "Passwords do not match" : ""}</p>
-        </div>
-        <button>Register</button>
+        <button className="auth-btn">Register</button>
       </form>
+      <button className="link-btn" onClick={() => props.onFormSwitch('login')}> Already have an account? login</button>
+      </div>
     </section>
   );
 }
