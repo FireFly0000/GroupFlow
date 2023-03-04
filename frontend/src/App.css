@@ -1,38 +1,104 @@
-.App {
-  text-align: center;
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.nav-bar{
+  background-color:#00ffbf;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+}
+
+.app-name{
+  display: flex;
+  background: none;
+  color: black;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.nav-bar-left-side, .nav-bar-right-side{
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-bar-left-side, .nav-bar-right-side{
+  text-decoration: none;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  color: black;
+  padding: 0.5px 0.5px;
+  font-weight: bold;
+}
+
+.nav-bar-right-side{
+  justify-content: flex-end;
+}
+
+.home-nav-btn{
+  display: flex;
+  background: none;
+  color: black;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.auth-form {
+  text-align: center;
+  display: flex;
+  min-height: 100vh;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-image: url(./assets/auth-background.jpg);
+  background-size: cover;
 }
 
-.App-link {
-  color: #61dafb;
+.Auth-form-container, .login-form, .register-form{
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Auth-form-container{
+  padding: 5rem;
+  border: 1px solid white;
+  border-radius: 10px;
+  margin: 0.5rem;
+  background-color:#00ffbf;
+}
+
+label{
+  text-align: left;
+  padding: 0.25rem 0;
+}
+
+input{
+  margin: 0.25rem 0;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.auth-btn{
+  border: none;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.link-btn{
+  background: none;
+  color: black;
+  text-decoration: underline;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
 }
