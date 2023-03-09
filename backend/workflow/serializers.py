@@ -4,12 +4,17 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Todo
+from .models import Todo, Group
 
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         fields = ('id', 'title', 'description', 'completed')
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('id', 'name', 'description', 'date_created', 'owner')
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod

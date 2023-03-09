@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework import viewsets
-from .serializers import TodoSerializer, MyTokenObtainPairSerializer, RegisterSerializer
-from .models import Todo
+from .serializers import TodoSerializer, MyTokenObtainPairSerializer, RegisterSerializer, GroupSerializer
+from .models import Todo, Group
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics
 from django.contrib.auth.models import User
@@ -16,6 +16,10 @@ from rest_framework import status
 class TodoView(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
+
+class GroupView(viewsets.ModelViewSet):
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
