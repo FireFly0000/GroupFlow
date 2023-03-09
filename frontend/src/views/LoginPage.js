@@ -19,6 +19,7 @@ const LoginPage = (props) => {
         <input type="text" id="username" placeholder="Enter Username" />
         <label htmlFor="password">Password</label>
         <input type="password" id="password" placeholder="Enter Password" />
+        <br></br>
         <button className="auth-btn" type="submit">Login</button>
       </form>
       <button className="link-btn" onClick={() => props.onFormSwitch('register')}> Don't have an account? Register</button>

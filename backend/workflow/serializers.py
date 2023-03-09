@@ -9,7 +9,7 @@ from .models import Todo, Group
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
-        fields = ('id', 'title', 'description', 'completed')
+        fields = ('id', 'group', 'title', 'description', 'completed')
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:

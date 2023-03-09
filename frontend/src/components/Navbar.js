@@ -15,7 +15,6 @@ const Navbar = () => {
   }
   const RouteChange = (np)=> {
     let path = np;
-    console.log(path)
     history.push(path)
   }
   return (
@@ -26,7 +25,7 @@ const Navbar = () => {
             <button className="app-name">GroupFlow</button>
           </div>  
           {
-          user ? 
+          user ?
           <div className="nav-bar-right-side">
             <button className="home-nav-btn" onClick={logoutUser}>Logout</button>
             <button className="home-nav-btn" onClick={()=>RouteChange('/home')}> Home </button>
