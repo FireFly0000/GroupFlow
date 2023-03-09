@@ -48,7 +48,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = User
         fields = ('id', 'name', 'email')
 
 
@@ -79,4 +79,4 @@ class TodoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Todo
-        fields = '__all__'
+        fields = ('id', 'group', 'title', 'description', 'due_date', 'completed')
