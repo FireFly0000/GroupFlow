@@ -11,19 +11,23 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 
+
 # Create your views here.
 
 class TodoView(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
 
 class UserView(viewsets.ModelViewSet):
     serializer_class = RegisterSerializer
@@ -38,6 +42,7 @@ def getRoutes(request):
         '/api/token/refresh/',
     ]
     return Response(routes)
+
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])

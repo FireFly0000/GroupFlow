@@ -4,14 +4,10 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Todo
+from .models import Todo, GroupMember, Group, Users
 
-class TodoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Todo
-        fields = ('id', 'title', 'description', 'completed')
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):  # noqa
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -20,6 +16,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         # ...
         return token
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -47,4 +44,39 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
-    
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = ('id', 'name', 'email')
+
+
+class GroupMemberSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = GroupMember
+        fields = ('id', 'user')
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    members = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Group
+        fields = ('id', 'name', 'members')
+
+    def get_members(self, obj):
+        members = GroupMember.objects.filter(group=obj)
+        return GroupMemberSerializer(members, many=True).data
+
+
+
+
+class TodoSerializer(serializers.ModelSerializer):
+    group = GroupSerializer()
+
+    class Meta:
+        model = Todo
+        fields = '__all__'
