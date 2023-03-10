@@ -4,9 +4,10 @@ from . import views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'todos', views.TodoView, 'todo')
+router.register(r'tasks', views.TaskView, 'task')
 router.register(r'users', views.UserView, 'user')
 router.register(r'groups', views.GroupView, 'group')
+router.register(r'group_member', views.GroupMemberView, 'group_member')
 
 from rest_framework_simplejwt.views import (
     TokenRefreshView,

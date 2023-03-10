@@ -27,9 +27,8 @@ const Navbar = () => {
           {
           user ?
           <div className="nav-bar-right-side">
+          <button className="home-nav-btn" onClick={()=>RouteChange('/home')}> Home </button>
             <button className="home-nav-btn" onClick={logoutUser}>Logout</button>
-            <button className="home-nav-btn" onClick={()=>RouteChange('/home')}> Home </button>
-            <button className="home-nav-btn" onClick={()=>RouteChange('/protected')}> Protected </button>
           </div>
           :
           <></>

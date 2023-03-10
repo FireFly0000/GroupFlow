@@ -1,15 +1,16 @@
 import axios from "axios";
 import React, {useEffect, useState} from 'react';
 import GroupList from '../components/GroupList'
+import MemberOfList from '../components/MemberofList'
 import useAxios from "../utils/useAxios";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import '../Home.css'
+
 
 function Home(){
     const [flag, setFlag] = useState(false)
     const [groupList, setGroupList] = useState([])
-    const [user_id, setUserid] = useState(0)
+    const [memberOf, setMemberOf] = useState([])
     const [username, setUsername] = useState(0)
     const api = useAxios();
     const [newGroupName, setNewGroupName] = useState('')
@@ -21,16 +22,17 @@ function Home(){
     useEffect(() => {
       const load_g = async ()=>{
         
-        const id = await api.get("/userID/");
-        setUserid(id.data.response);
 
         const un = await api.get("/username/");
         setUsername(un.data.response);
 
-        axios.get('http://127.0.0.1:8000/api/groups/')
-        .then(result =>{
-            setGroupList(result.data)
-        })
+        let res1 = await axios.get('http://127.0.0.1:8000/api/groups/')
+        await setGroupList(res1.data)
+
+
+        let res2 = await axios.get('http://127.0.0.1:8000/api/group_member/')
+        await setMemberOf(res2.data)
+
         
       }
       load_g()
@@ -43,17 +45,15 @@ function Home(){
 
         formField.append('name', newGroupName)
         formField.append('description', newGroupDescription)
-        formField.append('owner', user_id)
+        formField.append('owner', username)
 
         await axios({
             method: 'post',
-            url: 'http://127.0.0.1:8000/api/groups/',
+            url: 'api/groups/',
             data: formField
         }).then(res =>{
             console.log(res.data)
         })
-        setNewGroupName('')
-        setNewGroupD('')
         changeFlag()
     }
 
@@ -73,14 +73,29 @@ function Home(){
         <hr></hr>
         <h3> Welcome {username}, Groups you own</h3>
         <Row xs={1} lg={3}>
-        {groupList?.filter(group => group.owner === user_id).map((group) =>{
+        {groupList?.filter(group => group.owner === username).map((group) =>{
             return( 
-                <Col>
-                    <GroupList key = {group.id - 1} name = {group.name} description = {group.description} changeFlag = {changeFlag}/>
-                    <br></br>
+                <Col key = {group.id}>
+                    <GroupList key = {group.id - 1} id = {group.id} name = {group.name} description = {group.description} owner = {group.owner} changeFlag = {changeFlag}/>
+                    <br key = {group.id + 1}></br>
                 </Col>
             )})}
         </Row>
+        <hr></hr>
+        <h3> You are a member of</h3>
+        <Row xs={1} lg={3}>
+        {memberOf?.filter(group => group.members === username).map((group) =>{
+            return( 
+                <Col key = {group.id}>
+                    <MemberOfList key = {group.id - 1} id = {group.id} gid = {group.groups} changeFlag = {changeFlag} glist = {groupList}/>
+                    <br key = {group.id + 1}></br>
+                </Col>
+            )})
+
+        }
+
+        </Row>
+        
     </Container>
       )
   }

@@ -1,0 +1,7 @@
+input{
+  border-style: solid;
+  border-radius: 5px;
+}
+.members, h4{
+  display: inline;
+}
