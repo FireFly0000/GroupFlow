@@ -1,168 +1,103 @@
-import React, { Component } from "react";
-import Modal from "../components/Modal";
 import axios from "axios";
+import React, {useEffect, useState} from 'react';
+import GroupList from '../components/GroupList'
+import MemberOfList from '../components/MemberofList'
+import useAxios from "../utils/useAxios";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
-//initial commit
-class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      viewCompleted: false,
-      todoList: [],
-      modal: false,
-      activeItem: {
-        title: "",
-        description: "",
-        completed: false,
-      },
-    };
-  }
 
-  componentDidMount() {
-    this.refreshList();
-  }
+function Home(){
+    const [flag, setFlag] = useState(false)
+    const [groupList, setGroupList] = useState([])
+    const [memberOf, setMemberOf] = useState([])
+    const [username, setUsername] = useState(0)
+    const api = useAxios();
+    const [newGroupName, setNewGroupName] = useState('')
+    const [newGroupDescription, setNewGroupD] = useState('')
 
-  refreshList = () => {
-    axios
-      .get("/api/todos/")
-      .then((res) => this.setState({ todoList: res.data }))
-      .catch((err) => console.log(err));
-  };
-
-  toggle = () => {
-    this.setState({ modal: !this.state.modal });
-  };
-
-  handleSubmit = (item) => {
-    this.toggle();
-
-    if (item.id) {
-      axios
-        .put(`/api/todos/${item.id}/`, item)
-        .then((res) => this.refreshList());
-      return;
+    const changeFlag = () =>{
+      setFlag(!flag)
     }
-    axios
-      .post("/api/todos/", item)
-      .then((res) => this.refreshList());
-  };
+    useEffect(() => {
+      const load_g = async ()=>{
+        
 
-  handleDelete = (item) => {
-    axios
-      .delete(`/api/todos/${item.id}/`)
-      .then((res) => this.refreshList());
-  };
+        const un = await api.get("/username/");
+        setUsername(un.data.response);
 
-  createItem = () => {
-    const item = { title: "", description: "", completed: false };
+        let res1 = await axios.get('http://127.0.0.1:8000/api/groups/')
+        await setGroupList(res1.data)
 
-    this.setState({ activeItem: item, modal: !this.state.modal });
-  };
 
-  editItem = (item) => {
-    this.setState({ activeItem: item, modal: !this.state.modal });
-  };
+        let res2 = await axios.get('http://127.0.0.1:8000/api/group_member/')
+        await setMemberOf(res2.data)
 
-  displayCompleted = (status) => {
-    if (status) {
-      return this.setState({ viewCompleted: true });
+        
+      }
+      load_g()
+
+  
+    }, [flag])
+
+    const AddGroup = async () =>{
+        let formField = new FormData()
+
+        formField.append('name', newGroupName)
+        formField.append('description', newGroupDescription)
+        formField.append('owner', username)
+
+        await axios({
+            method: 'post',
+            url: 'api/groups/',
+            data: formField
+        }).then(res =>{
+            console.log(res.data)
+        })
+        changeFlag()
     }
 
-    return this.setState({ viewCompleted: false });
-  };
+    return(
+    <Container className="Home">
+        <Row>
+            <Col xs={12} md={8}>
+                <h3>Create New Group</h3>
+                <Form.Label>Group Name</Form.Label>
+                <Form.Control type="text" id="name" onChange={(e) => setNewGroupName(e.target.value)}/>
+                <Form.Label>Description</Form.Label>
+                <Form.Control type="text" id="Description" onChange={(e) => setNewGroupD(e.target.value)}/>
+                <br></br>
+                <Button onClick={() => AddGroup()}> Create Group</Button>
+            </Col>
+        </Row>
+        <hr></hr>
+        <h3> Welcome {username}, Groups you own</h3>
+        <Row xs={1} lg={3}>
+        {groupList?.filter(group => group.owner === username).map((group) =>{
+            return( 
+                <Col key = {group.id}>
+                    <GroupList key = {group.id - 1} id = {group.id} name = {group.name} description = {group.description} owner = {group.owner} changeFlag = {changeFlag}/>
+                    <br key = {group.id + 1}></br>
+                </Col>
+            )})}
+        </Row>
+        <hr></hr>
+        <h3> You are a member of</h3>
+        <Row xs={1} lg={3}>
+        {memberOf?.filter(group => group.members === username).map((group) =>{
+            return( 
+                <Col key = {group.id}>
+                    <MemberOfList key = {group.id - 1} id = {group.id} gid = {group.groups} changeFlag = {changeFlag} glist = {groupList}/>
+                    <br key = {group.id + 1}></br>
+                </Col>
+            )})
 
-  renderTabList = () => {
-    return (
-      <div className="nav nav-tabs">
-        <span
-          onClick={() => this.displayCompleted(true)}
-          className={this.state.viewCompleted ? "nav-link active" : "nav-link"}
-        >
-          Complete
-        </span>
-        <span
-          onClick={() => this.displayCompleted(false)}
-          className={this.state.viewCompleted ? "nav-link" : "nav-link active"}
-        >
-          Incomplete
-        </span>
-      </div>
-    );
-  };
+        }
 
-  DisplayItem = (viewCompleted) => {
-    const newItems = this.state.todoList.filter(
-      (item) => item.completed === viewCompleted
-    );
-    return newItems.map((item) => (
-      <li
-        key={item.id}
-        className="list-group-item d-flex justify-content-between align-items-center"
-      >
-        <span
-          className={`todo-title mr-2 ${
-            this.state.viewCompleted ? "completed-todo" : ""
-          }`}
-          title={item.description}
-        >
-          {item.title}
-        </span>
-        <span>
-          <button
-            className="btn btn-secondary mr-2"
-            onClick={() => this.editItem(item)}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => this.handleDelete(item)}
-          >
-            Delete
-          </button>
-        </span>
-      </li>
-    ));
+        </Row>
+        
+    </Container>
+      )
   }
 
-  renderItems = () => {
-    const { viewCompleted } = this.state;
-    
-    return(this.DisplayItem(viewCompleted));
-  };
-
-  render() {
-    return (
-      <main className="container">
-        <h1 className="text-white text-uppercase text-center my-4">Todo app</h1>
-        <div className="row">
-          <div className="col-md-6 col-sm-10 mx-auto p-0">
-            <div className="card p-3">
-              <div className="mb-4">
-                <button
-                  className="btn btn-primary"
-                  onClick={this.createItem}
-                >
-                  Add task
-                </button>
-              </div>
-              {this.renderTabList()}
-              <ul className="list-group list-group-flush border-top-0">
-                {this.renderItems()}
-              </ul>
-            </div>
-          </div>
-        </div>
-        {this.state.modal ? (
-          <Modal
-            activeItem={this.state.activeItem}
-            toggle={this.toggle}
-            onSave={this.handleSubmit}
-          />
-        ) : null}
-      </main>
-    );
-  }
-}
-
-export default Home;
+  export default Home;

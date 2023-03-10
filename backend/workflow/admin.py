@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Todo
+from .models import Task
 
-class TodoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'completed')
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'status')
 
 # Register your models here.
 
-admin.site.register(Todo, TodoAdmin)
+admin.site.register(Task, TaskAdmin)

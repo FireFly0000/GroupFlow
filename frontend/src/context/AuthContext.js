@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 
 const AuthContext = createContext();
 
+
+
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
@@ -38,7 +40,8 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
-      history.push("/");
+
+      history.push("/home");
     } else {
       alert("Something went wrong!");
     }
@@ -94,3 +97,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+

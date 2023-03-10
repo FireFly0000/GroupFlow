@@ -102,3 +102,9 @@ input{
   border-radius: 10px;
   cursor: pointer;
 }
+
+.home-nav-btn:hover{
+  background-color: white;
+  border-radius: 5px;
+  box-sizing: content-box;
+}

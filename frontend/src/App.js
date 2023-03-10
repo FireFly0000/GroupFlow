@@ -8,7 +8,7 @@ import Login from "./views/LoginPage";
 import Register from "./views/RegisterPage";
 import ProtectedPage from "./views/ProtectedPage";
 import Home from "./views/Home";
-
+import Tasks from "./views/tasks";
 
 function App() {
   return (
@@ -20,7 +20,8 @@ function App() {
             <PrivateRoute component={ProtectedPage} path="/protected" exact />
             <Route component={Login} path="/login" />
             <Route component={Register} path="/register" />
-            <Route component={Home} path="/home" /> 
+            <PrivateRoute component={Home} path="/home" />
+            <PrivateRoute component={Tasks} path="/tasks" />  
           </Switch>
         </AuthProvider>
       </div>
