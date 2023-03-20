@@ -28,7 +28,7 @@ const MemberOfList = (props) => {
         })
       }
     
-      const LeaveGroup = async () =>{
+    const LeaveGroup = async () =>{
         await axios.delete(`http://127.0.0.1:8000/api/group_member/${props.id}/`)
         props.changeFlag()
     } 

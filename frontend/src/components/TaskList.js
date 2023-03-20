@@ -15,6 +15,7 @@ const TaskList = (props) => {
         let ndd_field = newDueDate.split('-')
         let ndd = new Date(ndd_field[0] + ', ' + ndd_field[1] + ', ' + ndd_field[2])
         let formField = new FormData()
+        let inval_date = true
 
         if(today.toString().slice(0, 16) === ndd.toString().slice(0, 16) || today.getTime() < ndd.getTime()){
             formField.append('title', newTitle)
@@ -33,14 +34,16 @@ const TaskList = (props) => {
             }).catch(err =>{
                 console.log(err)
             })
+            inval_date = false
         }
-        else{
+        if (inval_date){
             alert("date cannot be in the pass")
         }
-
-        setNewStat('')
-        setEditing(false)
-        props.changeFlag()
+        else{
+            setNewStat('')
+            setEditing(false)
+            props.changeFlag()
+        }
     }
 
     const DeleteTask = async () =>{
@@ -79,7 +82,7 @@ const TaskList = (props) => {
                 </>
             :
                 <>
-                <Form.Label>Description</Form.Label>
+                <Form.Label>Title</Form.Label>
                 <Form.Control defaultValue={props.title} type="text" id="title" onChange={(e) => setNewTitle(e.target.value)}/>
                 <Form.Label>Description</Form.Label>
                 <Form.Control defaultValue={props.description} type="text" id="description" onChange={(e) => setNewDescription(e.target.value)}/>

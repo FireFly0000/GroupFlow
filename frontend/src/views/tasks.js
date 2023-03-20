@@ -50,6 +50,7 @@ function Tasks(){
     let ndd_field = newDueDate.split('-')
     let ndd = new Date(ndd_field[0] + ', ' + ndd_field[1] + ', ' + ndd_field[2])
     let formField = new FormData()
+    let inval_date = true
 
     if(today.toString().slice(0, 16) === ndd.toString().slice(0, 16) || today.getTime() < ndd.getTime()){
       formField.append('title', newTitle)
@@ -68,12 +69,15 @@ function Tasks(){
           console.log(err)   
         })
         setNewStat('')
+        inval_date = false
     }
-    else{
+    if (inval_date){
         alert("date cannot be in the pass")
     }
-    changeFlag()
-    setAdding(false)
+    else{
+      changeFlag()
+      setAdding(false)
+    }
   }
 
   const AddMember =  async () =>{
@@ -171,12 +175,12 @@ function Tasks(){
                 <input bg='blue' type="date" onChange={e=> setNewDueDate(e.target.value)}/>
                 <br></br>
                 <br></br>
-                <Dropdown variant="primary">
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                <Dropdown variant="secondary">
+                    <Dropdown.Toggle variant="light" id="dropdown-basic">
                         {newStat}
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu bg="primary">
+                    <Dropdown.Menu bg="secondary">
                         <Dropdown.Item onClick={() =>setNewStat('IN PROGRESS')}>IN PROGRESS</Dropdown.Item>
                         <Dropdown.Item onClick={() =>setNewStat('STUCK')}> STUCK</Dropdown.Item>
                         <Dropdown.Item onClick={() =>setNewStat('COMPLETED')}>COMPLETED</Dropdown.Item>
