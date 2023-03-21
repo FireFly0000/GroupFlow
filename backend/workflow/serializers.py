@@ -72,8 +72,6 @@ class GroupSerializer(serializers.ModelSerializer):
         return GroupMemberSerializer(members, many=True).data
 
 
-
-
 class TodoSerializer(serializers.ModelSerializer):
     group = GroupSerializer()
 
